@@ -1,0 +1,125 @@
+# Dictionary to store student's grades and letter grades
+students = {}
+
+# Function to determine letter grade for every subject's marks
+def get_letter_grade(score):
+    if score >= 90:
+        return 'A'
+    elif score >= 80:
+        return 'B'
+    elif score >= 70:
+        return 'C'
+    elif score >= 60:
+        return 'D'
+    elif score >= 50:
+        return 'E'
+    else:
+        return 'F'
+# This function takes a numeric grade (score) and returns it as letter grade
+
+# Function to add grades for a student
+def add_student_grades():
+    name = input("Enter student's name: ") # Get student's name
+    subjects = input("Enter student's subjects seperated by a comma: ").split(',') # Get any subjects
+    subjects = [subjects.strip() for subjects in subjects]
+    grades = [] # To store numeric grades
+    letter_grades = [] # To store letter grades
+
+    # Collect grades for 3 subjects
+    for subject in subjects:
+        while True:
+            try:
+                grade = float(input(f"Enter grade for subject {subject}: ")) # Get marks for each subject
+                if 0 <= grade <= 100:
+                    print("Mark has been added.")
+                    break
+                else:
+                    print("That is not a valid grade. Please enter a value between 0 and 100.")
+            except ValueError:
+                print("Invalid input. Please enter a numeric value.")
+        letter_grade = get_letter_grade(grade) # Get letter grade based on the marks
+        grades.append(grade) # Append numeric grade to grades list
+        letter_grades.append(letter_grade) # Append letter grade to letter_grades list
+
+    # Store both numerical and letter grades in the dictionary
+    students[name] = { 'subjects': subjects, 'grades': grades, 'letter_grades': letter_grades}
+
+    print(f"Marks and letter grades for {name} have been added.\n") # Confirmation message
+
+# Calculate the average grade
+def calculate_average_grade():
+    if students:   # Check if there any students in the dictionary
+        for name, data in students.items(): # Loop through each student and their data
+            grades = data['grades'] #Get the list of grades
+            average = sum(grades) / len(grades) # Calculate the average grade
+            print(f"{name}'s average grade: {average:.2f}") # Display average grade
+        print()
+    else:
+        print("\nNo grades available to calculate average.\n") # Message if there are no students
+2
+
+
+# Determine the letter grade
+def determine_letter_grade():
+    name = input("Enter the student's name to determine the overall letter grade: ")
+    if name in students: # Check if the student is in the dictionary
+        grades = students[name]['grades'] # Get the list of grades for the student
+        average = sum(grades) / len(grades) # Calculate average grade
+
+        # Determine the overall letter grade based on the average
+        overall_letter_grade = get_letter_grade(average)
+        # Print the student's average grade and overall letter grade
+        print(f"{name} has an average grade of {average:.2f} and an overall letter grade of {overall_letter_grade}.\n")
+    else:
+        print(f"No student named {name} found.\n") # Message if the student doesn't exist
+
+
+# Displaying the report of the student grades
+def display_report():
+    name = input("Enter the student's name to show the report: ") # Get the student's name
+    if name in students: # Check if there are any students in the dictionary
+        print("\nStudent Report:")
+        for name, data in students.items(): # Loop through each student and their data
+            subjects = data.get('subjects', [])
+            grades = data['grades'] # Get the list of grades
+            letter_grades = data['letter_grades'] # Get the list of letter grades
+            print(f'{name}: ') # Print student's name
+            for i, subject in enumerate(subjects): # Loop through each subjects
+                print(f"  Subject {subject}: Grade: {grades[i]}, Letter Grade: {letter_grades[i]}")
+            # Print thwe average grade for the student
+            print(f"  Average: {sum(grades) / len(grades):.2f}\n")
+    else:
+        print("\nNo student data available.\n") # Message if no students are present
+
+
+
+# The menu
+def menu():
+    while True: # Infinite loop to keep showing the menu until the user exits
+        print("Welcome to the Grading System") # Welcome message
+        print("1. Add Student Grades") # Option to add student grades
+        print("2. Calculate Average Grade") # Option to calculate the average grade
+        print("3. Determine the Overall Letter Grade") # Option to calculate overall grade
+        print("4. Display Report") # Option to display the report of all students
+        print("5. Exit") # Option to exit the program
+        choice = input('\nSelect your option (1-5): ') # Get user's menu choice
+
+        # Execute the appropriate function based on the user's choice
+        if choice == '1':
+            add_student_grades()
+        elif choice == '2':
+            calculate_average_grade()
+        elif choice == '3':
+            determine_letter_grade()
+        elif choice == '4':
+            display_report()
+        elif choice == '5':
+            # Exit the program if the user selects option 5
+            print("Exiting the program...")
+            break
+        else:
+            print("Invalid choice.\n") # Print a message for invalid choices
+
+
+# Run the menu
+menu()
